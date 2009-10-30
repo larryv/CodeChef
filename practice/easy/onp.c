@@ -1,6 +1,6 @@
 /*
     Lawrence Velazquez
-    26 Oct 2009
+    30 Oct 2009
     http://www.codechef.com/problems/ONP/
 */
 
