@@ -2,16 +2,13 @@
 SOURCES := $(wildcard *.c)
 TARGETS := $(SOURCES:%.c=%)
 
-# Compile using GCC, with lots of warnings
+# Compile using GCC, with lots of warnings, and define LOCAL
 CC := gcc
-CFLAGS := -Wall
-
-# Enable local code
-LOCAL := 1
+CFLAGS := -Wall -D LOCAL
 
 # Debugging?
 ifeq ($(DEBUG), 1)
-CFLAGS := $(CFLAGS) -g
+CFLAGS := $(CFLAGS) -g -D DEBUG
 endif
 
 
