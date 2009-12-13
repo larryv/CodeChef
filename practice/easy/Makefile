@@ -6,6 +6,14 @@ TARGETS := $(SOURCES:%.c=%)
 CC := gcc
 CFLAGS := -Wall
 
+# Enable local code
+LOCAL := 1
+
+# Debugging?
+ifeq ($(DEBUG), 1)
+CFLAGS := $(CFLAGS) -g
+endif
+
 
 all: $(TARGETS)
 
