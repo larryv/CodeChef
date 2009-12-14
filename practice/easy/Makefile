@@ -4,18 +4,20 @@ TARGETS := $(SOURCES:%.c=%)
 
 # Compile using GCC, with lots of warnings, and define LOCAL
 CC := gcc
-CFLAGS := -Wall -D LOCAL
+CFLAGS := -Wall
+CPPFLAGS := -D LOCAL
 
 # Debugging?
 ifeq ($(DEBUG), 1)
-CFLAGS := $(CFLAGS) -g -D DEBUG
+CFLAGS := $(CFLAGS) -g
+CPPFLAGS := $(CPPFLAGS) -D DEBUG
 endif
 
 
 all: $(TARGETS)
 
 $(TARGETS): %: %.c
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 .PHONY: clean
 clean:
