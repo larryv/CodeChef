@@ -9,7 +9,6 @@ CPPFLAGS := -D LOCAL
 
 # Debugging?
 ifeq ($(DEBUG), 1)
-CFLAGS := $(CFLAGS) -g
 CPPFLAGS := $(CPPFLAGS) -D DEBUG
 endif
 
