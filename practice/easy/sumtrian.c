@@ -11,52 +11,45 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX(x, y)   ((x) > (y) ? (x) : (y))
 
 
 #ifdef LOCAL
-static FILE *f;
+static FILE *f;     /* Uses a local file for input */
 #endif
 
 static inline int init();
 static inline int scan_int();
-static inline int alloc_ints(int ***, int);
+static inline int alloc_two_rows(int **, int);
 
 int main(int argc, char const *argv[])
 {
-    int **vals;
-    int n, m, p, i, j, k;
-    long max;
+    int *vals[2];
+    int n, m, i, j, k;
+    int max;
     n = init();
     
     for (i = 0; i < n; ++i) {
         max = 0;
         m = scan_int();
-        alloc_ints(&vals, m);
-        
-        #ifdef DEBUG
-        printf("Beginning triangle scan.\n");
-        #endif
+        if (alloc_two_rows(vals, m) == 1)
+            return 1;
         
         for (j = 1; j <= m; ++j) {
-            for (k = 1; k <= j; ++k) {
-                #ifdef DEBUG
-                printf("reading: vals[%d][%d]\n", j, k);
-                printf("up-left: %d\nup: %d\n", vals[j-1][k-1], vals[j-1][k]);
-                #endif
-                p = scan_int();
-                vals[j][k] = p + MAX(vals[j-1][k-1], vals[j-1][k]);
-            }
+            for (k = 1; k <= j; ++k)
+                vals[1][k] = scan_int() + MAX(vals[0][k-1], vals[0][k]);
+            memcpy(&vals[0][1], &vals[1][1], k * sizeof(int));
         }
         
-        for (k = 1; k < j; ++k) {
-            if (vals[j-1][k] > max)
-                max = vals[j-1][k];
+        for (k = 1; k <= m; ++k) {
+            if (vals[1][k] > max)
+                max = vals[1][k];
         }
         
-        printf("%d\n", max);
-        
+        if (printf("%d\n", max) < 0)
+            return 1;
     }
         
     return 0;
@@ -81,42 +74,22 @@ static inline int scan_int()
     scanf("%d", &n);
     #endif
     
-    #ifdef DEBUG
-    printf("Scanned: %d\n", n);
-    #endif
-    
     return n;
 }
 
-static inline int alloc_ints(int ***m, int n)
+static inline int alloc_two_rows(int *m[], int n)
 {
-    #ifdef DEBUG
-    printf("Beginning allocation.\n");
-    #endif
-    
-    if ((*m = (int **) malloc((n + 1) * sizeof(int *))) == NULL)
+    /* Allocate two rows */
+    m[0] = (int *) malloc((n + 1) * sizeof(int));
+    m[1] = (int *) malloc((n + 1) * sizeof(int));    
+    if (m[0] == NULL || m[1] == NULL)
         return 1;
     
-    while (n >= 0) {
-        #ifdef DEBUG
-        printf("n: %d\n", n);
-        #endif
-        
-        if (((*m)[n] = (int *) malloc((n + 2) * sizeof(int))) == NULL)
-            return 1;
-        (*m)[n][0] = (*m)[n][n+1] = 0;
-        
-        #ifdef DEBUG
-        printf("m[%1$d][0] = %2$d\nm[%1$d][%3$d] = %4$d\n",
-                n, (*m)[n][0], n+1, (*m)[n][n+1]);
-        #endif
-        
-        --n;
+    /* Zero out arrays */
+    int i;
+    for (i = 0; i <= n; ++i) {
+        m[0][i] = m[1][0] = 0;
     }
-    
-    #ifdef DEBUG
-    printf("Exiting allocation.\n");
-    #endif
     
     return 0;
 }
