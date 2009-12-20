@@ -20,9 +20,9 @@
 static FILE *f;     /* Uses a local file for input */
 #endif
 
-static inline int init();
-static inline int scan_int();
-static inline int alloc_two_rows(int **, int);
+static int init();
+static int scan_int();
+static int alloc_two_rows(int **, int);
 
 int main(int argc, char const *argv[])
 {
@@ -55,7 +55,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-static inline int init()
+static int init()
 {
     #ifdef LOCAL
     f = fopen("sumtrian.in", "r");
@@ -64,7 +64,7 @@ static inline int init()
     return scan_int();
 }
 
-static inline int scan_int()
+static int scan_int()
 {
     int n;
     
@@ -77,7 +77,7 @@ static inline int scan_int()
     return n;
 }
 
-static inline int alloc_two_rows(int *m[], int n)
+static int alloc_two_rows(int *m[], int n)
 {
     /* Allocate two rows */
     m[0] = (int *) malloc((n + 1) * sizeof(int));
