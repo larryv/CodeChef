@@ -5,20 +5,21 @@
 */
 
 #include <stdio.h>
+#include <stdint.h>
 
 int main()
 {
-    int n, k;
-    scanf("%d %d", &n, &k);
+    uint32_t n, k;
+    scanf("%u %u", &n, &k);
     
-    int x = 0;
-    int i, y;
+    uint32_t x = 0;
+    uint32_t i, y;
     for (i = 0; i < n; ++i) {
-        scanf("%d", &y);
+        scanf("%u", &y);
         if (y % k == 0)
             ++x;
     }
-    printf("%d", x);
+    printf("%u", x);
     
     return 0;
 }

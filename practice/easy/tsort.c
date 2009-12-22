@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 
 /*
@@ -18,9 +19,9 @@
 */
 #ifdef LOCAL
     static FILE *f;     /* Uses a local file for input */
-    #define SCAN_INT(n)     fscanf(f, "%d", n)
+    #define SCAN_INT(n)     fscanf(f, "%u", n)
 #else
-    #define SCAN_INT(n)     scanf("%d", n)
+    #define SCAN_INT(n)     scanf("%u", n)
 #endif
 
 
@@ -28,11 +29,11 @@
 #define K   1000000
 
 /* The chosen sort. */
-#define SORT countingsort
+#define SORT counting_sort
 
-static void countingsort(int32_t *, int32_t);
-static void init(int32_t *);
-static void read(int32_t *, int32_t);
+static void counting_sort(uint32_t *, uint32_t);
+static void init(uint32_t *);
+static void read(uint32_t *, uint32_t);
 
 int main(int argc, char const *argv[])
 {
@@ -40,35 +41,34 @@ int main(int argc, char const *argv[])
         t: Number of numbers in list to be sorted. (t <= 1,000,000)
         A: Array storing the sorted list. Length is t.
     */    
-    int32_t t;
+    uint32_t t;
     init(&t);
     
-    int32_t A[t];
+    uint32_t A[t];
     SORT(A, t);
     
-    int32_t i;
+    uint32_t i;
     for (i = 0; i < t; ++i)
-        printf("%d\n", A[i]);
+        printf("%u\n", A[i]);
     
     return 0;
 }
 
-static void countingsort(int32_t B[], int32_t n)
+static void counting_sort(uint32_t B[], uint32_t n)
 {
+    /* The final loop sets i = -1 at termination, so leave as signed int. */
     int32_t i;
-
-    /* Read in input */
-    int32_t A[n];
-    read(A, n);
     
     /* Initialize auxiliary space */
-    int32_t C[K + 1];
-    for (i = 0; i <= K; ++i)
-        C[i] = 0;
+    uint32_t C[K + 1];
+    memset(C, 0, (K + 1) * sizeof(uint32_t));
     
-    /* Let C[i] be the number of elements equal to i */
-    for (i = 0; i < n; ++i)
-        ++C[A[i]];
+    /* Read in input */
+    uint32_t A[n];
+    for (i = 0; i < n; ++i) {
+        SCAN_INT(&A[i]);
+        ++C[A[i]];  /* Let C[i] be the number of elements equal to i */
+    }
     
     /* Now let C[i] be the number of elements <= i */
     for (i = 1; i <= K; ++i)
@@ -80,7 +80,7 @@ static void countingsort(int32_t B[], int32_t n)
     }
 }
 
-static void init(int32_t *n)
+static void init(uint32_t *n)
 {
     #ifdef LOCAL
     f = fopen("tsort.in", "r");
@@ -89,7 +89,7 @@ static void init(int32_t *n)
     SCAN_INT(n);
 }
 
-static void read(int32_t *a, int32_t n)
+static void read(uint32_t *a, uint32_t n)
 {
     while (n-- > 0)
         SCAN_INT(a++);
