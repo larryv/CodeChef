@@ -3,7 +3,7 @@ SOURCES := $(wildcard *.c)
 TARGETS := $(SOURCES:%.c=%)
 
 # Compile using GCC, with lots of warnings, and define LOCAL
-CC := gcc
+CC := gcc -std=c99
 CFLAGS := -Wall
 CPPFLAGS := -D LOCAL
 
